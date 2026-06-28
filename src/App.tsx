@@ -32,6 +32,7 @@ function App() {
   const [loadedCount, setLoadedCount] = useState(0);
   const [progressPercent, setProgressPercent] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
   // Refs for slide info inners to allow Slide component to apply tilt properties
   const infoInnerRefs = [
@@ -149,6 +150,7 @@ function App() {
                   zIndex={getZIndex(idx)}
                   infoInnerRef={infoInnerRefs[idx]}
                   onLoad={handleImageLoad}
+                  onClick={() => setIsGalleryOpen(true)}
                 />
               );
             })}
@@ -253,6 +255,56 @@ function App() {
             </button>
           );
         })}
+      </div>
+
+      {/* Gallery Modal Popup */}
+      <div
+        className={`gallery-overlay ${isGalleryOpen ? "open" : ""}`}
+        onClick={() => setIsGalleryOpen(false)}
+      >
+        <div className="gallery-modal" onClick={(e) => e.stopPropagation()}>
+          <button className="gallery-close" onClick={() => setIsGalleryOpen(false)} aria-label="Close gallery">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+
+          <h2 className="gallery-title">Voyage Collection</h2>
+          <p className="gallery-subtitle">Select a destination to navigate</p>
+
+          <div className="gallery-grid">
+            {SLIDES_DATA.map((slide, idx) => (
+              <div
+                key={idx}
+                className={`gallery-item ${idx === activeIndex ? "active" : ""}`}
+                onClick={() => {
+                  setLastDirection(idx > activeIndex ? 1 : -1);
+                  setActiveIndex(idx);
+                  setIsGalleryOpen(false);
+                }}
+              >
+                <div className="gallery-img-wrapper">
+                  <img src={slide.image} alt={slide.title} className="gallery-img" />
+                </div>
+                <div className="gallery-item-info">
+                  <span className="gallery-item-title">{slide.title}</span>
+                  <span className="gallery-item-subtitle">{slide.subtitle}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </>
   );

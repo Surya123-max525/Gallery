@@ -9,6 +9,7 @@ interface SlideProps {
   zIndex: number;
   infoInnerRef: React.RefObject<HTMLDivElement | null>;
   onLoad: () => void;
+  onClick?: () => void;
 }
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -22,6 +23,7 @@ export const Slide: React.FC<SlideProps> = ({
   zIndex,
   infoInnerRef,
   onLoad,
+  onClick,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
@@ -130,8 +132,13 @@ export const Slide: React.FC<SlideProps> = ({
     <div
       ref={ref}
       className="slide"
-      style={{ zIndex }}
+      style={{ zIndex, cursor: isActive ? "pointer" : "default" }}
       {...attribs}
+      onClick={() => {
+        if (isActive && onClick) {
+          onClick();
+        }
+      }}
     >
       <div ref={innerRef} className="slide__inner">
         <div className="slide--image__wrapper">
