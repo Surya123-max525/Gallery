@@ -7,7 +7,7 @@ interface SlideInfoProps {
   isActive: boolean;
   isNext: boolean;
   isPrevious: boolean;
-  innerRef: React.RefObject<HTMLDivElement | null>;
+  innerRef: React.Ref<HTMLDivElement>;
 }
 
 export const SlideInfo: React.FC<SlideInfoProps> = ({

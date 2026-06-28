@@ -3,7 +3,8 @@ import { Loader } from "./components/Loader";
 import { Slide } from "./components/Slide";
 import { SlideInfo } from "./components/SlideInfo";
 
-const SLIDES_DATA = [
+// Fallback slides if no images are added to src/assets/images
+const DEFAULT_SLIDES = [
   {
     title: "Highlands",
     subtitle: "Scotland",
@@ -24,6 +25,27 @@ const SLIDES_DATA = [
   },
 ];
 
+// Dynamically import all images in src/assets/images
+const globImages = import.meta.glob<{ default: string }>("/src/assets/images/*.{png,jpg,jpeg,webp,svg}", { eager: true });
+
+const dynamicSlides = Object.entries(globImages).map(([path, module]) => {
+  // Extract filename as title (e.g. "/src/assets/images/scotland-mountains.jpg" -> "Scotland Mountains")
+  const fileName = path.split("/").pop()?.split(".")[0] || "Destination";
+  const formattedTitle = fileName
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+
+  return {
+    title: formattedTitle,
+    subtitle: "Explore",
+    description: "Discover this beautiful destination",
+    image: module.default,
+  };
+});
+
+const SLIDES_DATA = dynamicSlides.length > 0 ? dynamicSlides : DEFAULT_SLIDES;
+
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
 function App() {
@@ -34,12 +56,8 @@ function App() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
-  // Refs for slide info inners to allow Slide component to apply tilt properties
-  const infoInnerRefs = [
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-  ];
+  // Refs for slide info inners to allow Slide component to apply tilt properties dynamically
+  const infoInnerRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   // Callback for image loaded
   const handleImageLoad = useCallback(() => {
@@ -148,7 +166,8 @@ function App() {
                   isNext={isNext}
                   isPrevious={isPrevious}
                   zIndex={getZIndex(idx)}
-                  infoInnerRef={infoInnerRefs[idx]}
+                  infoInnerRefs={infoInnerRefs}
+                  index={idx}
                   onLoad={handleImageLoad}
                   onClick={() => setIsGalleryOpen(true)}
                 />
@@ -193,7 +212,9 @@ function App() {
                   isActive={isActive}
                   isNext={isNext}
                   isPrevious={isPrevious}
-                  innerRef={infoInnerRefs[idx]}
+                  innerRef={(el) => {
+                    infoInnerRefs.current[idx] = el;
+                  }}
                 />
               );
             })}

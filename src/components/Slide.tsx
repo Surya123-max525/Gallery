@@ -7,7 +7,8 @@ interface SlideProps {
   isNext: boolean;
   isPrevious: boolean;
   zIndex: number;
-  infoInnerRef: React.RefObject<HTMLDivElement | null>;
+  infoInnerRefs: React.RefObject<(HTMLDivElement | null)[]>;
+  index: number;
   onLoad: () => void;
   onClick?: () => void;
 }
@@ -21,7 +22,8 @@ export const Slide: React.FC<SlideProps> = ({
   isNext,
   isPrevious,
   zIndex,
-  infoInnerRef,
+  infoInnerRefs,
+  index,
   onLoad,
   onClick,
 }) => {
@@ -78,10 +80,11 @@ export const Slide: React.FC<SlideProps> = ({
         innerRef.current.style.setProperty("--bgPosY", `${bgPosY.toFixed(2)}%`);
       }
 
-      // Set CSS variables on slide-info__inner
-      if (infoInnerRef.current) {
-        infoInnerRef.current.style.setProperty("--rotX", `${rotY.toFixed(2)}deg`);
-        infoInnerRef.current.style.setProperty("--rotY", `${rotX.toFixed(2)}deg`);
+      // Set CSS variables on slide-info__inner dynamically from ref array
+      const infoInner = infoInnerRefs.current?.[index];
+      if (infoInner) {
+        infoInner.style.setProperty("--rotX", `${rotY.toFixed(2)}deg`);
+        infoInner.style.setProperty("--rotY", `${rotX.toFixed(2)}deg`);
       }
 
       rafId = requestAnimationFrame(tick);
@@ -120,7 +123,7 @@ export const Slide: React.FC<SlideProps> = ({
       el.removeEventListener("mouseleave", handleMouseLeave);
       cancelAnimationFrame(rafId);
     };
-  }, [isActive, infoInnerRef]);
+  }, [isActive, infoInnerRefs, index]);
 
   // Determine slide attributes
   const attribs: Record<string, string | boolean> = {};
