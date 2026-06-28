@@ -244,38 +244,41 @@ function App() {
       </div>
 
       {/* Milestones Navigation */}
-      <div className="slider-milestones">
-        <div className="milestones-track">
-          <div
-            className="milestones-progress"
-            style={{ width: `${(activeIndex / (SLIDES_DATA.length - 1)) * 100}%` }}
-          />
-        </div>
-        {SLIDES_DATA.map((slide, idx) => {
-          const isActive = idx === activeIndex;
-          const isCompleted = idx < activeIndex;
+      <div className="slider-milestones-container">
+        <h2 className="milestones-title">Milestones</h2>
+        <div className="slider-milestones">
+          <div className="milestones-track">
+            <div
+              className="milestones-progress"
+              style={{ width: `${(activeIndex / (SLIDES_DATA.length - 1)) * 100}%` }}
+            />
+          </div>
+          {SLIDES_DATA.map((slide, idx) => {
+            const isActive = idx === activeIndex;
+            const isCompleted = idx < activeIndex;
 
-          return (
-            <button
-              key={idx}
-              className={`milestone-node ${isActive ? "active" : ""} ${
-                isCompleted ? "completed" : ""
-              }`}
-              onClick={() => {
-                if (!isLoaded) return;
-                setLastDirection(idx > activeIndex ? 1 : -1);
-                setActiveIndex(idx);
-              }}
-              style={{ left: `${(idx / (SLIDES_DATA.length - 1)) * 100}%` }}
-              aria-label={`Go to slide ${idx + 1}: ${slide.title}`}
-            >
-              <div className="milestone-dot">
-                <span className="milestone-number">0{idx + 1}</span>
-              </div>
-              <div className="milestone-label">{slide.title}</div>
-            </button>
-          );
-        })}
+            return (
+              <button
+                key={idx}
+                className={`milestone-node ${isActive ? "active" : ""} ${
+                  isCompleted ? "completed" : ""
+                }`}
+                onClick={() => {
+                  if (!isLoaded) return;
+                  setLastDirection(idx > activeIndex ? 1 : -1);
+                  setActiveIndex(idx);
+                }}
+                style={{ left: `${(idx / (SLIDES_DATA.length - 1)) * 100}%` }}
+                aria-label={`Go to slide ${idx + 1}: ${slide.title}`}
+              >
+                <div className="milestone-dot">
+                  <span className="milestone-number">0{idx + 1}</span>
+                </div>
+                <div className="milestone-label">{slide.title}</div>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Gallery Modal Popup */}

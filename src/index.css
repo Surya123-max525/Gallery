@@ -359,17 +359,51 @@ button {
 /* ------------------------------------------------ */
 /* ----------------- MILESTONES ------------------- */
 /* ------------------------------------------------ */
-.slider-milestones {
+.slider-milestones-container {
   position: absolute;
-  bottom: 8%;
+  bottom: 5%;
   left: 50%;
   transform: translateX(-50%);
   width: min(80vw, 600px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.milestones-title {
+  font-family: var(--font-clash-display);
+  font-size: min(1.2rem, 3.5vw);
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  pointer-events: auto;
+  margin: 0;
+  position: relative;
+  
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 2px;
+    background: linear-gradient(90deg, #00e5ff, #0087ff);
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+  }
+}
+
+.slider-milestones {
+  width: 100%;
   height: 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 1000;
   pointer-events: auto;
 }
 
@@ -538,8 +572,8 @@ button {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
   z-index: 2000;
   display: flex;
   justify-content: center;
