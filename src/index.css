@@ -255,11 +255,15 @@ button {
   --z-offset: 45px;
   position: absolute;
   height: fit-content;
-  left: -15%;
-  bottom: 15%;
-  transform: translateZ(var(--z-offset));
+  left: 50%;
+  bottom: 12%;
+  transform: translate3d(-50%, 0, var(--z-offset));
   z-index: 2;
   pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 180%;
 }
 
 .slide-info--text {
@@ -267,8 +271,10 @@ button {
   overflow: hidden;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   white-space: pre-wrap;
   margin-bottom: 0.4cqw;
+  text-align: center;
   
   &[data-title] {
     font-size: min(4.5cqw, 3rem);
@@ -283,7 +289,6 @@ button {
   }
   
   &[data-subtitle] {
-    margin-left: 1cqw;
     font-size: min(3.5cqw, 2.2rem);
     font-weight: 600;
     text-transform: uppercase;
@@ -292,7 +297,6 @@ button {
   }
   
   &[data-description] {
-    margin-left: 0.5cqw;
     font-size: min(2cqw, 1rem);
     font-family: var(--font-archivo);
     font-weight: 300;
